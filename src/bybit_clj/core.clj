@@ -19,16 +19,14 @@
 (defn get-time
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/time)"
   [client]
-  (-> (str (:url client) "/market/time")
-      (utils/get-request)))
+  (utils/get-request (str (:url client) "/market/time") nil))
 
 (defn get-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/kline)
    "
   [client {:keys [category symbol interval start end limit]}]
   (->>
-   (str (:url client) "/market/kline?" "category=" category "&symbol=" symbol "&interval=" interval)
-   (#(when (and start end) (str % "&start=" start "&start=" end)))
-   (#(when limit (str % "&limit=" limit)))
-   (utils/get-request)))
+   {:category category :symbol symbol :interval interval :start start :end end :limit limit}
+   (utils/get-request (str (:url client) "/market/kline"))))
+
 

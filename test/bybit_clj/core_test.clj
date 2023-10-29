@@ -20,8 +20,14 @@
     (let [body
           (core/get-kline
            {:url core/rest-url}
-           {:category "inverse" :symbol "BTCUSDT" :interval 60 :start 1 :end 2 :limit 20})]
+           {:category "inverse" :symbol "BTCUSDT" :interval 60 :start 1 :end 2 :limit 20})
+          body-without-opt
+          (core/get-kline
+           {:url core/rest-url}
+           {:category "inverse" :symbol "BTCUSDT" :interval 60})]
       (request-is-ok body)
+      (prn body)
+      (request-is-ok body-without-opt)
       (-> body
           :result
           :list
