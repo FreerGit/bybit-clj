@@ -1,4 +1,3 @@
 (ns bybit-clj.utils-test
   (:require
-   [clojure.test :refer :all]))
-
+   [clojure.test :refer :all]))   
