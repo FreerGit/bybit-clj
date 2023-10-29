@@ -81,3 +81,12 @@
       (request-is-ok body)
       (request-is-ok body-without-opt)
       (kline-list-has-count body 20))))
+
+(deftest get-instruments-info
+  (testing "Get premium kline REST"
+    (let [body
+          (core/get-instruments-info
+           {:url core/rest-url}
+           {:category "spot" :symbol "BTCUSDT"})]
+      (request-is-ok body)
+      (kline-list-has-count body 1))))

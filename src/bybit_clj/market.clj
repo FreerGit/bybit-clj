@@ -49,4 +49,9 @@
    {:category category :symbol symbol :interval interval :start start :end end :limit limit}
    (utils/get-request (str (:url client) "/market/premium-index-price-kline"))))
 
-
+(defn get-instruments-info
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/instrument)"
+  [client {:keys [category symbol status base-coin limit cursor]}]
+  (->>
+   {:category category :symbol symbol :status status :baseCoin base-coin :limit limit :cursor cursor}
+   (utils/get-request (str (:url client) "/market/instruments-info"))))
