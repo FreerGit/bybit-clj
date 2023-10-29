@@ -2,6 +2,10 @@
 
 FIXME: description
 
+## Docs
+
+`lein codox` to generate docs in html format, is saved to docs/ 
+
 ## Installation
 
 Download from http://example.com/FIXME.

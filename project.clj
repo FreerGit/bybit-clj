@@ -10,4 +10,6 @@
   :target-path "target/%s"
   :aliases {:dev {:extra-paths ["test"]}}
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
+  :plugins [[lein-codox "0.10.8"]]
+  :codox {:doc-paths ["docs/"] :output-path "docs/"})

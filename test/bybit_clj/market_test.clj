@@ -23,7 +23,7 @@
   []
   {:category "inverse" :symbol "BTCUSDT" :interval 60})
 
-(defn kline-list-has-count
+(defn result-list-has-count
   [body size]
   (-> body
       :result
@@ -41,7 +41,7 @@
            (default-kline-params-no-opt))]
       (request-is-ok body)
       (request-is-ok body-without-opt)
-      (kline-list-has-count body 20))))
+      (result-list-has-count body 20))))
 
 (deftest get-mark-price-kline
   (testing "Get mark kline REST"
@@ -54,7 +54,7 @@
            (default-kline-params-no-opt))]
       (request-is-ok body)
       (request-is-ok body-without-opt)
-      (kline-list-has-count body 20))))
+      (result-list-has-count body 20))))
 
 (deftest get-index-price-kline
   (testing "Get index kline REST"
@@ -67,7 +67,7 @@
            (default-kline-params-no-opt))]
       (request-is-ok body)
       (request-is-ok body-without-opt)
-      (kline-list-has-count body 20))))
+      (result-list-has-count body 20))))
 
 (deftest get-premium-index-price-kline
   (testing "Get premium kline REST"
@@ -80,7 +80,7 @@
            (default-kline-params-no-opt))]
       (request-is-ok body)
       (request-is-ok body-without-opt)
-      (kline-list-has-count body 20))))
+      (result-list-has-count body 20))))
 
 (deftest get-instruments-info
   (testing "Get premium kline REST"
@@ -89,4 +89,34 @@
            {:url core/rest-url}
            {:category "spot" :symbol "BTCUSDT"})]
       (request-is-ok body)
-      (kline-list-has-count body 1))))
+      (result-list-has-count body 1))))
+
+(defn orderbook-levels-has-count
+  [body size]
+  (-> body
+      :result
+      :a
+      (#(is (count %) size))))
+
+(deftest get-orderbook
+  (testing "Get orderbook REST"
+    (let [body
+          (core/get-orderbook
+           {:url core/rest-url}
+           {:category "spot" :symbol "BTCUSDT" :limit 1})
+          body-200
+          (core/get-orderbook
+           {:url core/rest-url}
+           {:category "spot" :symbol "BTCUSDT" :limit 200})]
+      (request-is-ok body)
+      (orderbook-levels-has-count body 1)
+      (orderbook-levels-has-count body-200 200))))
+
+(deftest get-tickers
+  (testing "Get tickers REST"
+    (let [body
+          (core/get-tickers
+           {:url core/rest-url}
+           {:category "spot" :symbol "BTCUSDT"})]
+      (request-is-ok body)
+      (result-list-has-count body 1))))

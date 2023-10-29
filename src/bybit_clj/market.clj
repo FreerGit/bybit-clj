@@ -55,3 +55,17 @@
   (->>
    {:category category :symbol symbol :status status :baseCoin base-coin :limit limit :cursor cursor}
    (utils/get-request (str (:url client) "/market/instruments-info"))))
+
+(defn get-orderbook
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/orderbook)"
+  [client {:keys [category symbol limit]}]
+  (->>
+   {:category category :symbol symbol :limit limit}
+   (utils/get-request (str (:url client) "/market/orderbook"))))
+
+(defn get-tickers
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/tickers)"
+  [client {:keys [category symbol base-coin exp-date]}]
+  (->>
+   {:category category :symbol symbol :baseCoin base-coin :expDate exp-date}
+   (utils/get-request (str (:url client) "/market/tickers"))))
