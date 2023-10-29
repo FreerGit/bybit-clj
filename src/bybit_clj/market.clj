@@ -11,6 +11,8 @@
   (:require [bybit-clj.utils :as utils]
             [aleph.http :as http]))
 
+(set! *warn-on-reflection* true)
+
 (def rest-url
   "The rest URL for Bybit V5"
   "https://api.bybit.com/v5")
@@ -23,49 +25,58 @@
 
 (defn get-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/kline)"
-  [client {:keys [category symbol interval start end limit]}]
+  [client category symbol interval opts]
   (->>
-   {:category category :symbol symbol :interval interval :start start :end end :limit limit}
+   (merge {:category category :symbol symbol :interval interval} opts)
    (utils/get-request (str (:url client) "/market/kline"))))
 
 (defn get-mark-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/mark-kline)"
-  [client {:keys [category symbol interval start end limit]}]
+  [client category symbol interval opts]
   (->>
-   {:category category :symbol symbol :interval interval :start start :end end :limit limit}
+   (merge {:category category :symbol symbol :interval interval} opts)
    (utils/get-request (str (:url client) "/market/mark-price-kline"))))
 
 (defn get-index-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/index-kline)"
-  [client {:keys [category symbol interval start end limit]}]
+  [client category symbol interval opts]
   (->>
-   {:category category :symbol symbol :interval interval :start start :end end :limit limit}
+   (merge {:category category :symbol symbol :interval interval} opts)
    (utils/get-request (str (:url client) "/market/index-price-kline"))))
 
 (defn get-premium-index-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/preimum-index-kline)"
-  [client {:keys [category symbol interval start end limit]}]
+  [client category symbol interval opts]
   (->>
-   {:category category :symbol symbol :interval interval :start start :end end :limit limit}
+   (merge {:category category :symbol symbol :interval interval} opts)
    (utils/get-request (str (:url client) "/market/premium-index-price-kline"))))
 
 (defn get-instruments-info
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/instrument)"
-  [client {:keys [category symbol status base-coin limit cursor]}]
+  [client category opts]
   (->>
-   {:category category :symbol symbol :status status :baseCoin base-coin :limit limit :cursor cursor}
+   (merge {:category category} opts)
    (utils/get-request (str (:url client) "/market/instruments-info"))))
 
 (defn get-orderbook
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/orderbook)"
-  [client {:keys [category symbol limit]}]
+  [client category symbol opts]
   (->>
-   {:category category :symbol symbol :limit limit}
+   (merge {:category category :symbol symbol} opts)
    (utils/get-request (str (:url client) "/market/orderbook"))))
 
 (defn get-tickers
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/tickers)"
-  [client {:keys [category symbol base-coin exp-date]}]
+  [client category symbol opts]
   (->>
-   {:category category :symbol symbol :baseCoin base-coin :expDate exp-date}
+   (merge {:category category :symbol symbol} opts)
    (utils/get-request (str (:url client) "/market/tickers"))))
+
+(defn get-funding-history
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/history-fund-rate)"
+  [client category symbol opts]
+  (->>
+   (merge {:category category :symbol symbol} opts)
+   (utils/get-request (str (:url client) "/market/funding/history"))))
+
+

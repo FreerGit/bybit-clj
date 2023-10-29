@@ -5,11 +5,12 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [pjson "1.0.0"]
-                 [aleph "0.7.0-alpha2"]]
-  :main ^:skip-aot bybit-clj.core
+                 [aleph "0.7.0-alpha2"]
+                 [ring "1.10.0"]]
   :target-path "target/%s"
   :aliases {:dev {:extra-paths ["test"]}}
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
+             :test {:jvm-opts ["-Dorg.slf4j.simpleLogger.defaultLogLevel=debug"]}}
   :plugins [[lein-codox "0.10.8"]]
   :codox {:doc-paths ["docs/"] :output-path "docs/"})
