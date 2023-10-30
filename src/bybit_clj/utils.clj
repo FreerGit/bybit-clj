@@ -1,13 +1,9 @@
-(ns bybit-clj.utils
-  (:require [pjson.core :as json]
-            [aleph.http :as http]
-            [clj-commons.byte-streams :as bs]))
+(ns bybit-clj.utils)
 
 (set! *warn-on-reflection* true)
 
-(defn get-request
-  ([url query-params]
-   (->> @(http/get url {:query-params query-params})
-        :body
-        bs/to-string
-        json/read-str)))
+(defn get-timestamp
+  []
+  (quot (System/currentTimeMillis) 1000))
+
+
