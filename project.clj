@@ -6,7 +6,9 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [pjson "1.0.0"]
                  [aleph "0.7.0-alpha2"]
-                 [ring "1.10.0"]]
+                 [ring "1.10.0"]
+                 [buddy/buddy-core "1.7.1"]
+                 [org.clojure/data.codec "0.1.1"]]
   :target-path "target/%s"
   :aliases {:dev {:extra-paths ["test"]}}
   :profiles {:uberjar {:aot :all

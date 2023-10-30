@@ -1,7 +1,9 @@
 (ns bybit-clj.market-test
   (:require [clojure.test :refer :all]
             [bybit-clj.market :as market]
-            [manifold.deferred :as d]))
+            [manifold.deferred :as d]
+            [bybit-clj.utils :as utils]
+            [aleph.http :as http]))
 
 (defn request-is-ok [body]
   (is (= (get body "retCode") 0))

@@ -1,8 +1,9 @@
 (ns bybit-clj.market
   "Public and private endpoint functions and websocket feed . In all function signatures, `client` is a map with the following keys:
-- `:url` - rest URL
-- `:key` - optional - your Bybit API key
-- `:secret` - optional - your Bybit API key
+- `:url` - rest URL.
+- `:key` - optional - your Bybit API key.
+- `:secret` - optional - your Bybit API secret.
+- `:recv-window` - optional - how long an HTTP request is valid, in milliseconds.
   
   The library is design to easily swap out testnet for mainnet via `url` in `client`
 
@@ -135,4 +136,4 @@
    (->> (client/build-get-request (str (:url client) "/account-ratio"))
         (client/append-query-params
          (merge {:category category :symbol symbol :period period :limit limit}))
-        (client/send-request))))
+        (client/send-request))))"

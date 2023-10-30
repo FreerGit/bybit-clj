@@ -1,9 +1,13 @@
-(ns bybit-clj.utils)
+(ns bybit-clj.utils
+  (:require [clojure.string :as string]))
 
 (set! *warn-on-reflection* true)
 
 (defn get-timestamp
   []
-  (quot (System/currentTimeMillis) 1000))
+  (System/currentTimeMillis))
 
+(defn parse-request-params
+  [request-url]
+  (second (string/split request-url #"\?")))
 
