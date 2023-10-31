@@ -15,6 +15,14 @@
   [url]
   (build-base-request :get url))
 
+(defn build-post-request
+  ([url body]
+   (build-post-request url body {}))
+  ([url body opts]
+   (merge (build-base-request :post url)
+          {:body (json/write-str body) :content-type :json}
+          opts)))
+
 (defn send-request
   "Takes in a request, sends the http request, and returns the body of the response."
   [request]

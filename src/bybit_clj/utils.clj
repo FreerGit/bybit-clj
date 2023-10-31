@@ -10,4 +10,3 @@
 (defn parse-request-params
   [request-url]
   (second (string/split request-url #"\?")))
-

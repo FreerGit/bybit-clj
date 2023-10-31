@@ -9,11 +9,7 @@
   
     Remember not to store your `key` and `secret` in a public repo."
   (:require [bybit-clj.auth :as auth]
-            [bybit-clj.client :as client]
-            [bybit-clj.utils :as utils]))
-
-;; TODO build a request instead of using `get` directly. 
-;; TODO auth
+            [bybit-clj.client :as client]))
 
 (set! *warn-on-reflection* true)
 
@@ -32,4 +28,34 @@
         (auth/sign-request client)
         client/send-request)))
 
+(defn get-borrow-history
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/borrow-history)
+   Note this requries unified account
+  "
+  ([client]
+   (get-borrow-history client {}))
+  ([client opts]
+   (->> (client/build-get-request (str (:url client) "/borrow-history"))
+        (client/append-query-params opts)
+        (auth/sign-request client)
+        client/send-request)))
 
+(defn set-collateral-switch
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/set-collateral)"
+  [client coin collateral-switch]
+  (->> (client/build-post-request (str (:url client) "/set-collateral-switch")
+                                  {:coin coin :collateralSwitch collateral-switch})
+       (auth/sign-request client)
+       (client/send-request)))
+
+(defn get-collateral-info
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/collateral-info)"
+  ([client]
+   (->> (client/build-get-request (str (:url client) "/collateral-info"))
+        (auth/sign-request client)
+        (client/send-request)))
+  ([client currency]
+   (->> (client/build-get-request (str (:url client) "/collateral-info"))
+        (client/append-query-params {:currency currency})
+        (auth/sign-request client)
+        (client/send-request))))

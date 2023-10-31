@@ -8,7 +8,7 @@
   (str timestamp
        (:key client)
        (if (:recv-window client) (:recv-window client) "5000")
-       (utils/parse-request-params (:url request))))
+       (utils/parse-request-params (:url request)) (:body request)))
 
 (defn- create-http-signature
   [client timestamp request]

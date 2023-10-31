@@ -136,4 +136,4 @@
    (->> (client/build-get-request (str (:url client) "/account-ratio"))
         (client/append-query-params
          (merge {:category category :symbol symbol :period period :limit limit}))
-        (client/send-request))))"
+        (client/send-request))))
