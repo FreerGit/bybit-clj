@@ -7,9 +7,7 @@
     The library is design to easily swap out testnet for mainnet via `url` in `client`
   
     Remember not to store your `key` and `secret` in a public repo."
-  (:require [bybit-clj.auth :as auth]
-            [bybit-clj.client :as client]
-            [bybit-clj.utils :as utils]))
+  (:require [bybit-clj.client :as client]))
 
 (set! *warn-on-reflection* true)
 
@@ -76,4 +74,19 @@
   ([client category opts]
    (->> (client/build-get-request (str account-rest-url "/fee-rate"))
         (client/append-query-params (merge {:category category} opts))
+        (client/send-signed-request client))))
+
+(defn get-account-info
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/account-info)"
+  [client]
+  (->> (client/build-get-request (str account-rest-url "/info"))
+       (client/send-signed-request client)))
+
+(defn get-transaction-log
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/transaction-log)"
+  ([client]
+   (get-transaction-log client {}))
+  ([client opts]
+   (->> (client/build-get-request (str account-rest-url "/transaction-log"))
+        (client/append-query-params opts)
         (client/send-signed-request client))))
