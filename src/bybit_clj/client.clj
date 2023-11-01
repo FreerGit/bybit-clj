@@ -4,7 +4,8 @@
             [clojure.string :as str]
             [manifold.deferred :as d]
             [pjson.core :as json]
-            [ring.util.codec :refer [form-encode]]))
+            [ring.util.codec :refer [form-encode]]
+            [bybit-clj.auth :as auth]))
 
 (defn- build-base-request
   [method url]
@@ -30,6 +31,15 @@
            :body
            bs/to-string
            json/read-str))
+
+(defn send-signed-request
+  "Wrapper for sign-request with send-request"
+  [client request]
+  (->> (auth/sign-request client request)
+       (#(d/chain (http/request %)
+                  :body
+                  bs/to-string
+                  json/read-str))))
 
 (defn append-query-params
   [query-params request]

@@ -21,8 +21,7 @@
 
 (utils/get-timestamp)
 
-(def test-client {:url "https://example.com"
-                  :key "key"
+(def test-client {:key "key"
                   :secret "secret"})
 
 ;; https://stackoverflow.com/questions/42536178/strategy-for-stubbing-http-requests-in-clojure-tests
@@ -31,7 +30,7 @@
   (is (= {} @(account/get-wallet-balance test-client "UNIFIED")))
   (is (= @last-request
          {:request-method :get,
-          :url "https://example.com/wallet-balance?accountType=UNIFIED",
+          :url "https://api.bybit.com/v5/account/wallet-balance?accountType=UNIFIED",
           :headers {"Content-Type" "application/json",
                     "X-BAPI-SIGN" "9be3546ea7ec879995a0cdbff926d754035e8ef0091c466519254ef6efbc6f02",
                     "X-BAPI-API-KEY" "key",
@@ -42,7 +41,7 @@
   (is (= {} @(account/get-borrow-history test-client)))
   (is (= @last-request
          {:request-method :get,
-          :url "https://example.com/borrow-history"
+          :url "https://api.bybit.com/v5/account/borrow-history"
           :headers {"Content-Type" "application/json"
                     "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157"
                     "X-BAPI-API-KEY" "key",
@@ -53,7 +52,7 @@
   (is (= {} @(account/set-collateral-switch test-client "BTC" "ON")))
   (is (= @last-request
          {:request-method :post,
-          :url "https://example.com/set-collateral-switch",
+          :url "https://api.bybit.com/v5/account/set-collateral-switch",
           :body "{\"coin\":\"BTC\",\"collateralSwitch\":\"ON\"}",
           :content-type :json,
           :headers {"Content-Type" "application/json",
@@ -66,9 +65,31 @@
   (is (= {} @(account/get-collateral-info test-client)))
   (is (= @last-request
          {:request-method :get,
-          :url "https://example.com/collateral-info",
+          :url "https://api.bybit.com/v5/account/collateral-info",
           :headers {"Content-Type" "application/json",
                     "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-coin-greeks
+  (is (= {} @(account/get-coin-greeks test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/coin-greeks",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-fee-rate
+  (is (= {} @(account/get-fee-rate test-client "spot")))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/account/fee-rate?category=spot",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "bb7d991b08db33132aae6fe2b4b677e6f3d84e8c63206a8028ddb02fc7c06e9e",
                     "X-BAPI-API-KEY" "key",
                     "X-BAPI-TIMESTAMP" "1698680853",
                     "X-BAPI-RECV-WINDOW" "5000"}})))

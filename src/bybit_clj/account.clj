@@ -1,6 +1,5 @@
 (ns bybit-clj.account
   "Public and private endpoint functions and websocket feed . In all function signatures, `client` is a map with the following keys:
-  - `:url` - rest URL.
   - `:key` - optional - your Bybit API key.
   - `:secret` - optional - your Bybit API secret.
   - `:recv-window` - optional - how long an HTTP request is valid, in milliseconds.
@@ -9,24 +8,28 @@
   
     Remember not to store your `key` and `secret` in a public repo."
   (:require [bybit-clj.auth :as auth]
-            [bybit-clj.client :as client]))
+            [bybit-clj.client :as client]
+            [bybit-clj.utils :as utils]))
 
 (set! *warn-on-reflection* true)
 
-(def account-rest-url
+(def ^:private account-rest-url
   "The rest URL for Bybit V5 account"
   "https://api.bybit.com/v5/account")
+
+(def ^:private asset-rest-url
+  "The rest URL for Bybit V5 asset"
+  "https://api.bybit.com/v5/asset")
 
 (defn get-wallet-balance
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/wallet-balance)"
   ([client account-type]
    (get-wallet-balance client account-type {}))
   ([client account-type opts]
-   (->> (client/build-get-request (str (:url client) "/wallet-balance"))
+   (->> (client/build-get-request (str account-rest-url "/wallet-balance"))
         (client/append-query-params
          (merge {:accountType account-type} opts))
-        (auth/sign-request client)
-        client/send-request)))
+        (client/send-signed-request client))))
 
 (defn get-borrow-history
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/borrow-history)
@@ -35,27 +38,42 @@
   ([client]
    (get-borrow-history client {}))
   ([client opts]
-   (->> (client/build-get-request (str (:url client) "/borrow-history"))
+   (->> (client/build-get-request (str account-rest-url "/borrow-history"))
         (client/append-query-params opts)
-        (auth/sign-request client)
-        client/send-request)))
+        (client/send-signed-request client))))
 
 (defn set-collateral-switch
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/set-collateral)"
   [client coin collateral-switch]
-  (->> (client/build-post-request (str (:url client) "/set-collateral-switch")
+  (->> (client/build-post-request (str account-rest-url "/set-collateral-switch")
                                   {:coin coin :collateralSwitch collateral-switch})
-       (auth/sign-request client)
-       (client/send-request)))
+       (client/send-signed-request client)))
 
 (defn get-collateral-info
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/collateral-info)"
   ([client]
-   (->> (client/build-get-request (str (:url client) "/collateral-info"))
-        (auth/sign-request client)
-        (client/send-request)))
+   (->> (client/build-get-request (str account-rest-url "/collateral-info"))
+        (client/send-signed-request client)))
   ([client currency]
-   (->> (client/build-get-request (str (:url client) "/collateral-info"))
+   (->> (client/build-get-request (str account-rest-url "/collateral-info"))
         (client/append-query-params {:currency currency})
-        (auth/sign-request client)
-        (client/send-request))))
+        (client/send-signed-request client))))
+
+(defn get-coin-greeks
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/coin-greeks)"
+  ([client]
+   (->> (client/build-get-request (str asset-rest-url "/coin-greeks"))
+        (client/send-signed-request client)))
+  ([client base-coin]
+   (->> (client/build-get-request (str asset-rest-url "/coin-greeks"))
+        (client/append-query-params {:baseCoin base-coin})
+        (client/send-signed-request client))))
+
+(defn get-fee-rate
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/fee-rate)"
+  ([client category]
+   (get-fee-rate client category {}))
+  ([client category opts]
+   (->> (client/build-get-request (str account-rest-url "/fee-rate"))
+        (client/append-query-params (merge {:category category} opts))
+        (client/send-signed-request client))))
