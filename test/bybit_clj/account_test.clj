@@ -21,13 +21,18 @@
 
 (utils/get-timestamp)
 
-(def test-client {:key "key"
-                  :secret "secret"})
+(def test-client-account {:url account/url-account
+                          :key "key"
+                          :secret "secret"})
+
+(def test-client-asset {:url account/url-asset
+                        :key "key"
+                        :secret "secret"})
 
 ;; https://stackoverflow.com/questions/42536178/strategy-for-stubbing-http-requests-in-clojure-tests
 
 (deftest get-wallet-balance
-  (is (= {} @(account/get-wallet-balance test-client "UNIFIED")))
+  (is (= {} @(account/get-wallet-balance test-client-account "UNIFIED")))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/account/wallet-balance?accountType=UNIFIED",
@@ -38,7 +43,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-borrow-history
-  (is (= {} @(account/get-borrow-history test-client)))
+  (is (= {} @(account/get-borrow-history test-client-account)))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/account/borrow-history"
@@ -49,7 +54,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest set-collateral-switch
-  (is (= {} @(account/set-collateral-switch test-client "BTC" "ON")))
+  (is (= {} @(account/set-collateral-switch test-client-account "BTC" "ON")))
   (is (= @last-request
          {:request-method :post,
           :url "https://api.bybit.com/v5/account/set-collateral-switch",
@@ -62,7 +67,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-collateral-info
-  (is (= {} @(account/get-collateral-info test-client)))
+  (is (= {} @(account/get-collateral-info test-client-account)))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/account/collateral-info",
@@ -73,7 +78,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-coin-greeks
-  (is (= {} @(account/get-coin-greeks test-client)))
+  (is (= {} @(account/get-coin-greeks test-client-asset)))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/asset/coin-greeks",
@@ -84,7 +89,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-fee-rate
-  (is (= {} @(account/get-fee-rate test-client "spot")))
+  (is (= {} @(account/get-fee-rate test-client-account "spot")))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/account/fee-rate?category=spot",
@@ -95,7 +100,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-account-info
-  (is (= {} @(account/get-account-info test-client)))
+  (is (= {} @(account/get-account-info test-client-account)))
   (is (= @last-request
          {:request-method :get,
           :url "https://api.bybit.com/v5/account/info",
@@ -106,7 +111,7 @@
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
 (deftest get-transaction-log
-  (is (= {} @(account/get-transaction-log test-client)))
+  (is (= {} @(account/get-transaction-log test-client-account)))
   (is (= @last-request
          {:request-method :get, :url "https://api.bybit.com/v5/account/transaction-log",
           :headers {"Content-Type" "application/json",

@@ -11,20 +11,28 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^:private account-rest-url
-  "The rest URL for Bybit V5 account"
+(def url-account
+  "The rest URL for Bybit V5 account mainnet"
   "https://api.bybit.com/v5/account")
 
-(def ^:private asset-rest-url
-  "The rest URL for Bybit V5 asset"
+(def url-account-testnet
+  "The rest URL for Bybit V5 account testnet"
+  "https://api-testnet.bybit.com/v5/account")
+
+(def url-asset
+  "The rest URL for Bybit V5 asset mainnet"
   "https://api.bybit.com/v5/asset")
+
+(def url-asset-testnet
+  "The rest URL for Bybit V5 asset testnet"
+  "https://api-testnet.bybit.com/v5/account")
 
 (defn get-wallet-balance
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/wallet-balance)"
   ([client account-type]
    (get-wallet-balance client account-type {}))
   ([client account-type opts]
-   (->> (client/build-get-request (str account-rest-url "/wallet-balance"))
+   (->> (client/build-get-request (str (:url client) "/wallet-balance"))
         (client/append-query-params
          (merge {:accountType account-type} opts))
         (client/send-signed-request client))))
@@ -36,34 +44,36 @@
   ([client]
    (get-borrow-history client {}))
   ([client opts]
-   (->> (client/build-get-request (str account-rest-url "/borrow-history"))
+   (->> (client/build-get-request (str (:url client) "/borrow-history"))
         (client/append-query-params opts)
         (client/send-signed-request client))))
 
 (defn set-collateral-switch
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/set-collateral)"
   [client coin collateral-switch]
-  (->> (client/build-post-request (str account-rest-url "/set-collateral-switch")
+  (->> (client/build-post-request (str (:url client) "/set-collateral-switch")
                                   {:coin coin :collateralSwitch collateral-switch})
        (client/send-signed-request client)))
 
 (defn get-collateral-info
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/collateral-info)"
   ([client]
-   (->> (client/build-get-request (str account-rest-url "/collateral-info"))
+   (->> (client/build-get-request (str (:url client) "/collateral-info"))
         (client/send-signed-request client)))
   ([client currency]
-   (->> (client/build-get-request (str account-rest-url "/collateral-info"))
+   (->> (client/build-get-request (str (:url client) "/collateral-info"))
         (client/append-query-params {:currency currency})
         (client/send-signed-request client))))
 
 (defn get-coin-greeks
-  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/coin-greeks)"
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/coin-greeks)
+  
+   The url in client is under `/asset` you could use `url-asset` or `url-asset-testnet` for this."
   ([client]
-   (->> (client/build-get-request (str asset-rest-url "/coin-greeks"))
+   (->> (client/build-get-request (str (:url client) "/coin-greeks"))
         (client/send-signed-request client)))
   ([client base-coin]
-   (->> (client/build-get-request (str asset-rest-url "/coin-greeks"))
+   (->> (client/build-get-request (str (:url client) "/coin-greeks"))
         (client/append-query-params {:baseCoin base-coin})
         (client/send-signed-request client))))
 
@@ -72,14 +82,14 @@
   ([client category]
    (get-fee-rate client category {}))
   ([client category opts]
-   (->> (client/build-get-request (str account-rest-url "/fee-rate"))
+   (->> (client/build-get-request (str (:url client) "/fee-rate"))
         (client/append-query-params (merge {:category category} opts))
         (client/send-signed-request client))))
 
 (defn get-account-info
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/account/account-info)"
   [client]
-  (->> (client/build-get-request (str account-rest-url "/info"))
+  (->> (client/build-get-request (str (:url client) "/info"))
        (client/send-signed-request client)))
 
 (defn get-transaction-log
@@ -87,6 +97,6 @@
   ([client]
    (get-transaction-log client {}))
   ([client opts]
-   (->> (client/build-get-request (str account-rest-url "/transaction-log"))
+   (->> (client/build-get-request (str (:url client) "/transaction-log"))
         (client/append-query-params opts)
-        (client/send-signed-request client))))
+        (client/send-signed-request client)))) 

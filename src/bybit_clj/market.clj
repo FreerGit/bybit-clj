@@ -13,114 +13,116 @@
 
 (set! *warn-on-reflection* true)
 
-(def market-rest-url
-  "The rest URL for Bybit V5"
+(def url-market
+  "The rest URL for Bybit V5 market mainnet"
   "https://api.bybit.com/v5/market")
+
+(def url-market-testnet
+  "The rest URL for Bybit V5 market mainnet"
+  "https://api-testnet.bybit.com/v5/market")
 
 (defn get-time
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/time)"
-  []
-  (-> (str market-rest-url "/time")
+  [client]
+  (-> (str (:url client) "/time")
       client/build-get-request
       client/send-request))
 
 (defn get-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/kline)"
-  [category symbol interval opts]
-  (->> (client/build-get-request (str market-rest-url "/kline"))
+  [client category symbol interval opts]
+  (->> (client/build-get-request (str (:url client) "/kline"))
        (client/append-query-params
         (merge {:category category :symbol symbol :interval interval} opts))
        client/send-request))
 
 (defn get-mark-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/mark-kline)"
-  [category symbol interval opts]
-  (->> (client/build-get-request (str market-rest-url "/mark-price-kline"))
+  [client category symbol interval opts]
+  (->> (client/build-get-request (str (:url client) "/mark-price-kline"))
        (client/append-query-params
         (merge {:category category :symbol symbol :interval interval} opts))
        client/send-request))
 
 (defn get-index-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/index-kline)"
-  [category symbol interval opts]
-  (->> (client/build-get-request (str market-rest-url "/index-price-kline"))
+  [client category symbol interval opts]
+  (->> (client/build-get-request (str (:url client) "/index-price-kline"))
        (client/append-query-params
         (merge {:category category :symbol symbol :interval interval} opts))
        client/send-request))
 
 (defn get-premium-index-price-kline
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/preimum-index-kline)"
-  [category symbol interval opts]
-  (->> (client/build-get-request (str market-rest-url "/premium-index-price-kline"))
+  [client category symbol interval opts]
+  (->> (client/build-get-request (str (:url client) "/premium-index-price-kline"))
        (client/append-query-params
         (merge {:category category :symbol symbol :interval interval} opts))
        (client/send-request)))
 
 (defn get-instruments-info
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/instrument)"
-  [category opts]
-  (->> (client/build-get-request (str market-rest-url "/instruments-info"))
+  [client category opts]
+  (->> (client/build-get-request (str (:url client) "/instruments-info"))
        (client/append-query-params
         (merge {:category category :symbol symbol} opts))
        (client/send-request)))
 
 (defn get-orderbook
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/orderbook)"
-  [category symbol opts]
-  (->> (client/build-get-request (str market-rest-url "/orderbook"))
+  [client category symbol opts]
+  (->> (client/build-get-request (str (:url client) "/orderbook"))
        (client/append-query-params
         (merge {:category category :symbol symbol} opts))
        (client/send-request)))
 
 (defn get-tickers
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/tickers)"
-  [category symbol opts]
-  (->> (client/build-get-request (str market-rest-url "/tickers"))
+  [client category symbol opts]
+  (->> (client/build-get-request (str (:url client) "/tickers"))
        (client/append-query-params
         (merge {:category category :symbol symbol} opts))
        (client/send-request)))
 
 (defn get-funding-history
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/history-fund-rate)"
-  [category symbol opts]
-  (->> (client/build-get-request (str market-rest-url "/funding/history"))
+  [client category symbol opts]
+  (->> (client/build-get-request (str (:url client) "/funding/history"))
        (client/append-query-params
         (merge {:category category :symbol symbol} opts))
        (client/send-request)))
 
 (defn get-recent-trades
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/recent-trade)"
-  [category symbol opts]
-  (->> (client/build-get-request (str market-rest-url "/recent-trade"))
+  [client category symbol opts]
+  (->> (client/build-get-request (str (:url client) "/recent-trade"))
        (client/append-query-params
         (merge {:category category :symbol symbol} opts))
        (client/send-request)))
 
 (defn get-open-interest
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/open-interest)"
-  [category symbol interval-time opts]
-  (->> (client/build-get-request (str market-rest-url "/open-interest"))
+  [client category symbol interval-time opts]
+  (->> (client/build-get-request (str (:url client) "/open-interest"))
        (client/append-query-params
         (merge {:category category :symbol symbol :intervalTime interval-time} opts))
        (client/send-request)))
 
 (defn get-risk-limit
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/risk-limit)"
-  ([category]
-   (->> (client/build-get-request (str market-rest-url "/risk-limit"))
-        (client/append-query-params
-         (merge {:category category}))
+  ([client category]
+   (->> (client/build-get-request (str (:url client) "/risk-limit"))
+        (client/append-query-params {:category category})
         (client/send-request)))
-  ([category symbol]
-   (->> (client/build-get-request (str market-rest-url "/risk-limit"))
-        (client/append-query-params
-         (merge {:category category :symbol symbol}))
+  ([client category symbol]
+   (->> (client/build-get-request (str (:url client) "/risk-limit"))
+        (client/append-query-params {:category category :symbol symbol})
         (client/send-request))))
 
 (defn get-delivery-price
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/delivery-price)"
-  [category opts]
-  (->> (client/build-get-request (str market-rest-url "/delivery-price"))
+  [client category opts]
+  (->> (client/build-get-request (str (:url client) "/delivery-price"))
        (client/append-query-params
         (merge {:category category} opts))
        (client/send-request)))
@@ -129,10 +131,10 @@
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/market/long-short-ratio)
    Linear only has USDT perps
    "
-  ([category symbol period]
-   (get-long-short-ratio category symbol period 50))
-  ([category symbol period limit]
-   (->> (client/build-get-request (str market-rest-url "/account-ratio"))
+  ([client category symbol period]
+   (get-long-short-ratio client category symbol period 50))
+  ([client category symbol period limit]
+   (->> (client/build-get-request (str (:url client) "/account-ratio"))
         (client/append-query-params
          (merge {:category category :symbol symbol :period period :limit limit}))
         (client/send-request))))

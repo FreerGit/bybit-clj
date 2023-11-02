@@ -21,7 +21,8 @@
 
 (utils/get-timestamp)
 
-(def test-client {:key "key"
+(def test-client {:url asset/url-asset
+                  :key "key"
                   :secret "secret"})
 
 (deftest get-delivery-record
