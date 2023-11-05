@@ -68,3 +68,64 @@
                     "X-BAPI-TIMESTAMP" "1698680853",
                     "X-BAPI-RECV-WINDOW" "5000"}})))
 
+(deftest get-single-coin-balance
+  (is (= {} @(asset/get-single-coin-balance test-client "CONTRACT")))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/transfer/query-account-coins-balance?accountType=CONTRACT",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "5b7590b8b6d494a3ca64924fafadec66b3b64d6c382ec15d61d0868a4160dbeb",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-transferable-coin
+  (is (= {} @(asset/get-transferable-coin test-client "UNIFIED" "CONTRACT")))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/transfer/query-transfer-coin-list?fromAccountType=UNIFIED&toAccountType=CONTRACT",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "7225f2bb6c4630025e435b5a57ea3dea09c869fb1fec78505df7af51bb6552e8",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest create-internal-transfer
+  (is (= {} @(asset/create-internal-transfer test-client
+                                             "42c0cfb0-6bca-c242-bc76-4e6df6cbcb16"
+                                             "BTC"
+                                             "0.05"
+                                             "UNIFIED"
+                                             "CONTRACT")))
+  (is (= @last-request
+         {:request-method :post,
+          :url "https://api.bybit.com/v5/asset/transfer/inter-transfer",
+          :body "{\"transferId\":\"42c0cfb0-6bca-c242-bc76-4e6df6cbcb16\",\"coin\":\"BTC\",\"amount\":\"0.05\",\"fromAccountType\":\"UNIFIED\",\"toAccountType\":\"CONTRACT\"}",
+          :content-type :json,
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "9a1dadd0d3f9a1de98636830053c8a29dabec407f9c7c3fea7d52b8a8b8330ed",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-transfer-records
+  (is (= {} @(asset/get-transfer-records test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/transfer/query-account-coins-balance",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-sub-uid
+  (is (= {} @(asset/get-sub-uid test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/transfer/query-sub-member-list",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))

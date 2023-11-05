@@ -7,7 +7,8 @@
       The library is design to easily swap out testnet for mainnet via `url` in `client`
     
       Remember not to store your `key` and `secret` in a public repo."
-  (:require [bybit-clj.client :as client]))
+  (:require [bybit-clj.client :as client]
+            [bybit-clj.asset :as asset]))
 
 (set! *warn-on-reflection* true)
 
@@ -59,15 +60,46 @@
         (client/append-query-params (merge {:accountType account-type} opts))
         (client/send-signed-request client))))
 
-;; (defn get-single-coin-balance
-;;   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/account-coin-balance)
-;;    Sub account _cannot_ query master account balance
-;;    Sub account can oly check its own balance
-;;    Master account can check its own and its sub UIDs balance"
-;;   ([client account-type]
-;;    (get-usdc-session-settlement client account-type {}))
-;;   ([client account-type opts]
-;;    (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
-;;         (client/append-query-params (merge {:accountType account-type} opts))
-;;         (client/send-signed-request client))))
+(defn get-single-coin-balance
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/account-coin-balance)
+   Sub account _cannot_ query master account balance
+   Sub account can oly check its own balance
+   Master account can check its own and its sub UIDs balance"
+  ([client account-type]
+   (get-single-coin-balance client account-type {}))
+  ([client account-type opts]
+   (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
+        (client/append-query-params (merge {:accountType account-type} opts))
+        (client/send-signed-request client))))
+
+(defn get-transferable-coin
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/transferable-coin)"
+  [client from-account-type to-account-type]
+  (->> (client/build-get-request (str (:url client) "/transfer/query-transfer-coin-list"))
+       (client/append-query-params {:fromAccountType from-account-type :toAccountType to-account-type})
+       (client/send-signed-request client)))
+
+(defn create-internal-transfer
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/create-inter-transfer)"
+  [client transfer-id coin amount from-account-type to-account-type]
+  (->> (client/build-post-request
+        (str (:url client) "/transfer/inter-transfer")
+        {:transferId transfer-id :coin coin :amount amount
+         :fromAccountType from-account-type :toAccountType to-account-type})
+       (client/send-signed-request client)))
+
+(defn get-transfer-records
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/inter-transfer-list)"
+  ([client]
+   (get-transfer-records client {}))
+  ([client opts]
+   (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
+        (client/append-query-params opts)
+        (client/send-signed-request client))))
+
+(defn get-sub-uid
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/sub-uid-list)"
+  [client]
+  (->> (client/build-get-request (str (:url client) "/transfer/query-sub-member-list"))
+       (client/send-signed-request client)))
 
