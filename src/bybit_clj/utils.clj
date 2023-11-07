@@ -10,3 +10,7 @@
 (defn parse-request-params
   [request-url]
   (second (string/split request-url #"\?")))
+
+(defn create-full-url
+  [client endpoint]
+  (str (:url client) endpoint))

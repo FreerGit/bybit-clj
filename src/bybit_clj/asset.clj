@@ -25,7 +25,7 @@
   ([client category]
    (get-delivery-record client category {}))
   ([client category opts]
-   (->> (client/build-get-request (str (:url client) "/delivery-record"))
+   (->> (client/build-get-request client "/delivery-record")
         (client/append-query-params (merge {:category category} opts))
         (client/send-signed-request client))))
 
@@ -34,7 +34,7 @@
   ([client category]
    (get-usdc-session-settlement client category {}))
   ([client category opts]
-   (->> (client/build-get-request (str (:url client) "/settlement-record"))
+   (->> (client/build-get-request client "/settlement-record")
         (client/append-query-params (merge {:category category} opts))
         (client/send-signed-request client))))
 
@@ -42,11 +42,11 @@
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/asset-info)
    For now, it can query SPOT only."
   ([client account-type]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-asset-info"))
+   (->> (client/build-get-request client "/transfer/query-asset-info")
         (client/append-query-params {:accountType account-type})
         (client/send-signed-request client)))
   ([client account-type coin]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-asset-info"))
+   (->> (client/build-get-request client "/transfer/query-asset-info")
         (client/append-query-params (merge {:accountType account-type :coin coin}))
         (client/send-signed-request client))))
 
@@ -56,7 +56,7 @@
   ([client account-type]
    (get-usdc-session-settlement client account-type {}))
   ([client account-type opts]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
+   (->> (client/build-get-request client "/transfer/query-account-coins-balance")
         (client/append-query-params (merge {:accountType account-type} opts))
         (client/send-signed-request client))))
 
@@ -68,24 +68,23 @@
   ([client account-type]
    (get-single-coin-balance client account-type {}))
   ([client account-type opts]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
+   (->> (client/build-get-request client "/transfer/query-account-coins-balance")
         (client/append-query-params (merge {:accountType account-type} opts))
         (client/send-signed-request client))))
 
 (defn get-transferable-coin
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/transferable-coin)"
   [client from-account-type to-account-type]
-  (->> (client/build-get-request (str (:url client) "/transfer/query-transfer-coin-list"))
+  (->> (client/build-get-request client "/transfer/query-transfer-coin-list")
        (client/append-query-params {:fromAccountType from-account-type :toAccountType to-account-type})
        (client/send-signed-request client)))
 
 (defn create-internal-transfer
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/create-inter-transfer)"
   [client transfer-id coin amount from-account-type to-account-type]
-  (->> (client/build-post-request
-        (str (:url client) "/transfer/inter-transfer")
-        {:transferId transfer-id :coin coin :amount amount
-         :fromAccountType from-account-type :toAccountType to-account-type})
+  (->> (client/build-post-request client "/transfer/inter-transfer"
+                                  {:transferId transfer-id :coin coin :amount amount
+                                   :fromAccountType from-account-type :toAccountType to-account-type})
        (client/send-signed-request client)))
 
 (defn get-transfer-records
@@ -93,14 +92,14 @@
   ([client]
    (get-transfer-records client {}))
   ([client opts]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-account-coins-balance"))
+   (->> (client/build-get-request client "/transfer/query-account-coins-balance")
         (client/append-query-params opts)
         (client/send-signed-request client))))
 
 (defn get-sub-uid
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/sub-uid-list)"
   [client]
-  (->> (client/build-get-request (str (:url client) "/transfer/query-sub-member-list"))
+  (->> (client/build-get-request client "/transfer/query-sub-member-list")
        (client/send-signed-request client)))
 
 ;; ------------------------------
@@ -110,7 +109,7 @@
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/unitransfer)
    Read the docs! this function is quite complex with some intricacies regarding main-sub and sub-sub accounts."
   [client required-params]
-  (->> (client/build-post-request (str (:url client) "/transfer/universal-transfer") required-params)
+  (->> (client/build-post-request client "/transfer/universal-transfer" required-params)
        (client/send-signed-request client)))
 
 (defn get-universal-transfer-records
@@ -118,7 +117,7 @@
   ([client]
    (get-universal-transfer-records client {}))
   ([client opts]
-   (->> (client/build-get-request (str (:url client) "/transfer/query-universal-transfer-list"))
+   (->> (client/build-get-request client "/transfer/query-universal-transfer-list")
         (client/append-query-params opts)
         (client/send-signed-request client))))
 
@@ -127,14 +126,14 @@
   ([client]
    (get-allowed-deposit-coin client {}))
   ([client opts]
-   (->> (client/build-get-request (str (:url client) "/deposit/query-allowed-list"))
+   (->> (client/build-get-request client "/deposit/query-allowed-list")
         (client/append-query-params opts)
         (client/send-signed-request client))))
 
 (defn set-deposit-account
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/set-deposit-acct)"
   [client accountType]
-  (->> (client/build-post-request (str (:url client) "/deposit/deposit-to-account") {:account-type accountType})
+  (->> (client/build-post-request client "/deposit/deposit-to-account" {:account-type accountType})
        (client/send-signed-request client)))
 
 (defn get-deposit-records
@@ -143,7 +142,7 @@
   ([client]
    (get-deposit-records client {}))
   ([client opts]
-   (->> (client/build-get-request (str (:url client) "/deposit/query-record"))
+   (->> (client/build-get-request client "/deposit/query-record")
         (client/append-query-params opts)
         (client/send-signed-request client))))
 

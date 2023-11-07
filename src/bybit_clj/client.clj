@@ -5,7 +5,8 @@
             [manifold.deferred :as d]
             [pjson.core :as json]
             [ring.util.codec :refer [form-encode]]
-            [bybit-clj.auth :as auth]))
+            [bybit-clj.auth :as auth]
+            [bybit-clj.utils :as utils]))
 
 (defn- build-base-request
   [method url]
@@ -13,14 +14,14 @@
    :url url})
 
 (defn build-get-request
-  [url]
-  (build-base-request :get url))
+  [client endpoint]
+  (build-base-request :get (utils/create-full-url client endpoint)))
 
 (defn build-post-request
-  ([url body]
-   (build-post-request url body {}))
-  ([url body opts]
-   (merge (build-base-request :post url)
+  ([client endpoint body]
+   (build-post-request client endpoint body {}))
+  ([client endpoint body opts]
+   (merge (build-base-request :post (utils/create-full-url client endpoint))
           {:body (json/write-str body) :content-type :json}
           opts)))
 
