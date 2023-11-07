@@ -129,3 +129,71 @@
                     "X-BAPI-API-KEY" "key",
                     "X-BAPI-TIMESTAMP" "1698680853",
                     "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest create-universal-transfer
+  (is (= {} @(asset/create-universal-transfer
+              test-client
+              {:transferId "42c0cfb0-6bca-c242-bc76-4e6df6cbcb16"
+               :coin "BTC"
+               :amount "0.05"
+               :fromMemberId 592334
+               :toMemberId 691355
+               :fromAccountType "CONTRACT"
+               :toAccountType "UNIFIED"})))
+  (is (= @last-request
+         {:request-method :post,
+          :url "https://api.bybit.com/v5/asset/transfer/universal-transfer",
+          :body "{\"transferId\":\"42c0cfb0-6bca-c242-bc76-4e6df6cbcb16\",\"coin\":\"BTC\",\"amount\":\"0.05\",\"fromMemberId\":592334,\"toMemberId\":691355,\"fromAccountType\":\"CONTRACT\",\"toAccountType\":\"UNIFIED\"}",
+          :content-type :json,
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "f00a523ccea172e90987724f4c8feed09a47418a2766de36a383d7d9c2441cbb",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-universal-transfer-records
+  (is (= {} @(asset/get-universal-transfer-records test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/transfer/query-universal-transfer-list",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-allowed-deposit-coin
+  (is (= {} @(asset/get-allowed-deposit-coin test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/deposit/query-allowed-list",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest set-deposit-account
+  (is (= {} @(asset/set-deposit-account
+              test-client "UNIFIED")))
+  (is (= @last-request
+         {:request-method :post,
+          :url "https://api.bybit.com/v5/asset/deposit/deposit-to-account",
+          :body "{\"account-type\":\"UNIFIED\"}",
+          :content-type :json,
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "3439a7e6c1d94e66bf8c335546feaab684f6f99825fa91ff72ff1a697338986d",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-deposit-records
+  (is (= {} @(asset/get-deposit-records test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/deposit/query-record",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))

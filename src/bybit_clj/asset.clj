@@ -103,3 +103,51 @@
   (->> (client/build-get-request (str (:url client) "/transfer/query-sub-member-list"))
        (client/send-signed-request client)))
 
+;; ------------------------------
+;; TODO, untested with api key
+
+(defn create-universal-transfer
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/unitransfer)
+   Read the docs! this function is quite complex with some intricacies regarding main-sub and sub-sub accounts."
+  [client required-params]
+  (->> (client/build-post-request (str (:url client) "/transfer/universal-transfer") required-params)
+       (client/send-signed-request client)))
+
+(defn get-universal-transfer-records
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/unitransfer-list)"
+  ([client]
+   (get-universal-transfer-records client {}))
+  ([client opts]
+   (->> (client/build-get-request (str (:url client) "/transfer/query-universal-transfer-list"))
+        (client/append-query-params opts)
+        (client/send-signed-request client))))
+
+(defn get-allowed-deposit-coin
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/deposit-coin-spec)"
+  ([client]
+   (get-allowed-deposit-coin client {}))
+  ([client opts]
+   (->> (client/build-get-request (str (:url client) "/deposit/query-allowed-list"))
+        (client/append-query-params opts)
+        (client/send-signed-request client))))
+
+(defn set-deposit-account
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/set-deposit-acct)"
+  [client accountType]
+  (->> (client/build-post-request (str (:url client) "/deposit/deposit-to-account") {:account-type accountType})
+       (client/send-signed-request client)))
+
+(defn get-deposit-records
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/deposit-record)
+   this is regarding to on-chain"
+  ([client]
+   (get-deposit-records client {}))
+  ([client opts]
+   (->> (client/build-get-request (str (:url client) "/deposit/query-record"))
+        (client/append-query-params opts)
+        (client/send-signed-request client))))
+
+;; TODO, untested with api key
+;; ------------------------------
+
+
