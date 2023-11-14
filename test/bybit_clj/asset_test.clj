@@ -197,3 +197,15 @@
                     "X-BAPI-API-KEY" "key",
                     "X-BAPI-TIMESTAMP" "1698680853",
                     "X-BAPI-RECV-WINDOW" "5000"}})))
+
+(deftest get-coin-info
+  (is (= {} @(asset/get-coin-info test-client)))
+  (is (= @last-request
+         {:request-method :get,
+          :url "https://api.bybit.com/v5/asset/coin/query-info",
+          :headers {"Content-Type" "application/json",
+                    "X-BAPI-SIGN" "e47095f2ac81449cea89c774ab5aa067aca0de296cb09d1cbe9ace308ce51157",
+                    "X-BAPI-API-KEY" "key",
+                    "X-BAPI-TIMESTAMP" "1698680853",
+                    "X-BAPI-RECV-WINDOW" "5000"}})))
+

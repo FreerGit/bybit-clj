@@ -7,8 +7,7 @@
       The library is design to easily swap out testnet for mainnet via `url` in `client`
     
       Remember not to store your `key` and `secret` in a public repo."
-  (:require [bybit-clj.client :as client]
-            [bybit-clj.asset :as asset]))
+  (:require [bybit-clj.client :as client]))
 
 (set! *warn-on-reflection* true)
 
@@ -102,9 +101,6 @@
   (->> (client/build-get-request client "/transfer/query-sub-member-list")
        (client/send-signed-request client)))
 
-;; ------------------------------
-;; TODO, untested with api key
-
 (defn create-universal-transfer
   "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/unitransfer)
    Read the docs! this function is quite complex with some intricacies regarding main-sub and sub-sub accounts."
@@ -146,7 +142,13 @@
         (client/append-query-params opts)
         (client/send-signed-request client))))
 
-;; TODO, untested with api key
-;; ------------------------------
+(defn get-coin-info
+  "[API DOCS](https://bybit-exchange.github.io/docs/v5/asset/coin-info)"
+  ([client]
+   (get-coin-info client {}))
+  ([client opts]
+   (->> (client/build-get-request client "/coin/query-info")
+        (client/append-query-params opts)
+        (client/send-signed-request client))))
 
 
