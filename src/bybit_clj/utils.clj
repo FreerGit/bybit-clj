@@ -14,3 +14,6 @@
 (defn create-full-url
   [client endpoint]
   (str (:url client) endpoint))
+
+(defn contains-many? [m & ks]
+  (every? #(contains? m %) ks))
