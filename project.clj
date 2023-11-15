@@ -7,7 +7,8 @@
                  [pjson "1.0.0"]
                  [aleph "0.7.0-alpha2"]
                  [ring "1.10.0"]
-                 [buddy/buddy-core "1.7.1"]]
+                 [buddy/buddy-core "1.7.1"]
+                 [stylefruits/gniazdo "1.2.2"]]
   :target-path "target/%s"
   :aliases {:dev {:extra-paths ["test"]}}
   :profiles {:uberjar {:aot :all

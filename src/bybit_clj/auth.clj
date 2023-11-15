@@ -29,14 +29,17 @@
 
 (defn- create-websocket-signature
   [secret timestamp]
-  (let [prehash-string (str "GET/realtime" (timestamp + 5000))
+  (let [prehash-string (str "GET/realtime" (+ timestamp 10000))
         hmac (mac/hash prehash-string {:key secret :alg :hmac+sha256})]
     (codecs/bytes->hex hmac)))
 
-(defn sign-message
-  [message {:keys [key secret]}]
+(defn create-auth-message
+  [{:keys [key secret]}]
   (let [timestamp (utils/get-timestamp)]
-    (merge message
-           {:key key
-            :timestamp timestamp
-            :signature (create-websocket-signature secret timestamp)})))
+    {:op "auth" :args [key (+ timestamp 10000) (create-websocket-signature secret timestamp)]}))
+
+;; (merge message
+;;        {:key key
+;;         :timestamp timestamp
+;;         :signature (create-websocket-signature secret timestamp)})
+    
