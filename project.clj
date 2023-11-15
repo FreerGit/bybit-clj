@@ -1,4 +1,4 @@
-(defproject bybit-clj "1.0-SNAPSHOT"
+(defproject org.clojars.sven_11/bybit-clj "1.0-SNAPSHOT"
   :description "A mostly complete wrapper for the Bybit API."
   :url "https://github.com/FreerGit/bybit-clj"
   :license {:name "MIT"
