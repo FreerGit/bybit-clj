@@ -64,7 +64,7 @@ Heartbeat is currently not handled by choice, send a [heartbeat packet](https://
 - `:channels` -  vector of subscription strings eg. `["orderbook.50.BTCUSDT"]`
 - `:key` - optional - your Bybit API key
 - `:secret` - optional - your Bybit API secret
-- `:on-connect` - optional - A unary function called after the connection has been established. The argument is a [WebSocketSession](https://www.eclipse.org/jetty/javadoc/9.4.8.v20171121/org/eclipse/jetty/websocket/common/WebSocketSession.html).
+- `:on-connect` - optional - A unary function called after the connection has been established. The argument is a [WebSocketSession](https://eclipse.dev/jetty/javadoc/jetty-12/org/eclipse/jetty/websocket/common/WebSocketSession.html).
 - `:on-error` - optional - A unary function called in case of errors. The argument is a `Throwable` describing the error.
 - `:on-close` - optional - A binary function called when the connection is closed. Arguments are an `int` status code and a `String` description of reason.    
 
